@@ -3,7 +3,6 @@ const router = express.Router();
 const { Competition , Ranking, User} = require("../models.js");
 
 
-
 router.get("/competition/:name", async(req, res) => {
     const competition_name = req.params.name;
 
@@ -14,7 +13,7 @@ router.get("/competition/:name", async(req, res) => {
         return res.status(404).json({ message: 'Competition not found' });
       }
 
-      const ranking_users = await Ranking.find({competitionId: found_competition._id}).sort({rank: 1}).populate('userId', 'username'); 
+      const ranking_users = await Ranking.find({competitionId: found_competition._id}).sort({rank: 1}); 
 
       // found_user.sort((a,b) => a.rank - b.rank);
     

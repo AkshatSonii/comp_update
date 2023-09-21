@@ -113,17 +113,30 @@
 
 
                                 <!-- ranking list start  -->
-                                <!-- <ul id="listingTable" class="t_body c-flex ali-c pagination">
-                                    
-                                </ul> -->
+                                 <ul  class="t_body c-flex ali-c pagination">
+                                    <% user_s.forEach((ranking) => { %>
+                                    <div class="competition_user_row r-flex ali-c jut-sb">
+                                    <li class="t_data competition_user_box r-flex ali-c">
+                                        <!-- <%= ranking.rank %> -->
+                                        <span class="competition_user_img r-flex ali-c jut-c">
+                                            <img src="../images/logo.png">
+                                        </span>
+                                        <span class="competition_user_name"><%= ranking.name %></span>
+                                    </li>
+                                    <li class="t_data">🏆 &nbsp; <%= ranking.rank %></li>
+                                    <li class="t_data">📝 &nbsp; 50/100</li>
+                                </div>
+                                <% }); %>
+                                </ul>
+                                
 
-                                <ul class="t_body c-flex ali-c pagination">
+                                <!-- <ul class="t_body c-flex ali-c pagination">
                                     <% user_s.forEach((ranking) => { %>
                                         <li>
                                             <%= ranking.name %> - Rank: <%= ranking.rank %>
                                         </li>
                                     <% }); %>
-                                </ul>
+                                </ul> -->
 
 
                                 <!-- ranking list ends -->
