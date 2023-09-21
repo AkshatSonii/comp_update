@@ -110,9 +110,26 @@
                                     <li class="t_heading">User Rank</li>
                                     <li class="t_heading">User Blog</li>
                                 </ul>
-                                <ul id="listingTable" class="t_body c-flex ali-c pagination">
+
+
+                                <!-- ranking list start  -->
+                                <!-- <ul id="listingTable" class="t_body c-flex ali-c pagination">
                                     
+                                </ul> -->
+
+                                <ul class="t_body c-flex ali-c pagination">
+                                    <% user_s.forEach((ranking) => { %>
+                                        <li>
+                                            <%= ranking.name %> - Rank: <%= ranking.rank %>
+                                        </li>
+                                    <% }); %>
                                 </ul>
+
+
+                                <!-- ranking list ends -->
+
+
+
                                 <ul class="competition_pageination r-flex ali-c jut-sb">
                                     <li>
                                         <a href="javascript:prevPage()" id="btn_prev">

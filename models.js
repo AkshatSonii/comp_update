@@ -75,7 +75,7 @@ const rankingSchema = new mongoose.Schema({
   blogId: String,
   viewCount: { type: Number, default: 0 },
   competitionId: String,
-  rank: String,
+  rank: Number,
   qulified: Boolean,
 });
 
