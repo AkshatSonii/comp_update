@@ -23,10 +23,10 @@ router.get("/competition/:name", async(req, res) => {
 
       for(let i=0;i<ranking_users.length ;i++){
         const a = await User.findOne({_id : ranking_users[i].userId});
-        user_s.push({name : a.username, rank : ranking_users[i].rank});
+        user_s.push({name : a.username , rank : ranking_users[i].rank , blogId : ranking_users[i].blogId});
       }
 
-      res.status(201).render("comparison" , {user_s});
+      res.status(201).render("comparison" , {user_s : user_s , competition : found_competition});
     }
     catch(err){
       console.log(err);

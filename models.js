@@ -64,7 +64,7 @@ const competitionSchema = new mongoose.Schema({
   competitionName: String,
   blogId: Array,
   threshold: Number,
-  prize: Number,
+  prize: Array,
   status: String,
   startDate: String,
   endDate: String,
