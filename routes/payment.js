@@ -3,29 +3,32 @@ const router = express.Router();
 const { Blog, User, Referral, transporter,
    UserInfo, Earnings, TotalEarnings, paySlots, monthlyViews } = require("../models.js");
 
+   const {encrypt, decrypt} = require("./encrypt")
+
 const jwtVerify = require("./jwt")
 
 
 router.get("/all_referrals", async function(req,res){
   try {
     const user = jwtVerify(req); // Verify JWT and extract user data
-    console.log('user =', user);
+    //console.log('user =', user);
 
     if (!user) {
-      console.log('User not authenticated.');
+      //console.log('User not authenticated.');
       return res.json(null);
     }
 
     const refData = await Referral.findOne({ userId: user.user._id });
-    console.log('refData =', refData);
+    //console.log('refData =', refData);
     let total=0;
     if (!refData || !refData.referralArray) {
-      console.log('No referral data found.');
+      //console.log('No referral data found.');
       return res.json({ newData: [], totalDataCount: 0,total});
     }
 
     for(let i in refData.referralArray){
       let userData = await User.findOne({_id: refData.referralArray[i]});
+      userData._id = encrypt(userData._id)
       total=total+((userData.totalEarn)/20);
     }
 
@@ -35,9 +38,10 @@ router.get("/all_referrals", async function(req,res){
     const skip = (page - 1) * pageSize;
 
     const userDataPromises = refData.referralArray.slice(skip, skip + pageSize).map(async (userId) => {
-      const userData = await User.findOne({ _id: userId });
-      console.log("userId=",userId._id.toString());
-      console.log('userData =', userData);
+      let userData = await User.findOne({ _id: userId });
+      userData._id = encrypt(userData._id)
+      //console.log("userId=",userId._id.toString());
+      //console.log('userData =', userData);
       return userData;
     });
 
@@ -45,10 +49,10 @@ router.get("/all_referrals", async function(req,res){
 
     const totalDataCount = refData.referralArray.length;
 
-    console.log('referral data =', newData);
+    //console.log('referral data =', newData);
     res.json({ newData, totalDataCount,total});
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 })
@@ -59,8 +63,8 @@ router.get("/referral_pay", async function(req,res){
 
 router.get("/calculateEarnings", async function(req, res){
   let user = jwtVerify(req);
-  console.log("user = ", user)
-  console.log(user==null)
+  //console.log("user = ", user)
+  //console.log(user==null)
   let amounts = []
   if (user==null){
     amounts = []
@@ -71,9 +75,9 @@ router.get("/calculateEarnings", async function(req, res){
       res.status(400).json("no user found")
     }
     const views = await monthlyViews.find({ userId: user._id });
-    // console.log("blogs = ", views)
+    // //console.log("blogs = ", views)
     for(let i in views){
-      // console.log(views[i].viewCount)
+      // //console.log(views[i].viewCount)
       let slot = (views[i].viewCount/1000)
       try{
         //pay_slip = paySlots.find({slot: slot}).amount
@@ -89,9 +93,9 @@ router.get("/calculateEarnings", async function(req, res){
 })
 
 router.post("/totalEarningsRef", async function(req, res){
-  let user = req.body.userId
-  console.log("user = ", user)
-  console.log(user==null)
+  let user = decrypt(req.body.userId)
+  //console.log("user = ", user)
+  //console.log(user==null)
   let amounts = []
   let total_pay = 0
   let month = req.body.month
@@ -105,25 +109,26 @@ router.post("/totalEarningsRef", async function(req, res){
     }
 
     let refData = await Referral.findOne({ userId: user});
-    console.log("referrals")
+    //console.log("referrals")
     for(let i in refData.referralArray){
-      console.log(refData.referralArray[i])
+      //console.log(refData.referralArray[i])
       let _id = refData.referralArray[i]
 
       let userTable = await User.findOne({_id: user})
+      userTable._id = encrypt(userTable._id)
     
       let date = new Date(year, month, 1), y = date.getFullYear(), m = date.getMonth();
-      console.log("date = ", date)
-      console.log("m = ", m)
+      //console.log("date = ", date)
+      //console.log("m = ", m)
       let firstDay = new Date(y, m, 2);
       let lastDay = new Date(y, m + 1, 0);
-      console.log(firstDay)
-      console.log(lastDay)
+      //console.log(firstDay)
+      //console.log(lastDay)
       let views = await monthlyViews.find({userId: _id, startDate: firstDay, endDate: lastDay});
-      console.log("blogs = ", views)
+      //console.log("blogs = ", views)
       let pay_slip = 0
       for(let i in views){
-        console.log(views[i].viewCount)
+        //console.log(views[i].viewCount)
         let slot = (views[i].viewCount/1000)
         try{
           //pay_slip = paySlots.find({slot: slot}).amount
@@ -142,8 +147,8 @@ router.post("/totalEarningsRef", async function(req, res){
 
 router.post("/totalEarnings", async function(req, res){
   let user = jwtVerify(req);
-  console.log("user = ", user)
-  console.log(user==null)
+  //console.log("user = ", user)
+  //console.log(user==null)
   let amounts = []
   let total_pay = 0
   if (user==null){
@@ -159,15 +164,15 @@ router.post("/totalEarnings", async function(req, res){
       let date = new Date(), y = date.getFullYear(), m = date.getMonth();
       let firstDay = new Date(y, m, 2);
       let lastDay = new Date(y, m + 1, 0);
-      console.log("date = ", date. firstDay, lastDay)
+      //console.log("date = ", date. firstDay, lastDay)
       views = await monthlyViews.find({userId: user._id, startDate: firstDay, endDate: lastDay});
     }
     else{
       views = await monthlyViews.find({ userId: user._id });
     }
-    console.log("blogs = ", views)
+    //console.log("blogs = ", views)
     for(let i in views){
-      console.log(views[i].viewCount)
+      //console.log(views[i].viewCount)
       let slot = (views[i].viewCount/1000)
       try{
         //pay_slip = paySlots.find({slot: slot}).amount
@@ -186,8 +191,8 @@ router.post("/totalEarnings", async function(req, res){
 
 router.get("/complete_earnings", async function(req, res){
   let user = jwtVerify(req);
-  console.log("user = ", user)
-  console.log(user==null)
+  //console.log("user = ", user)
+  //console.log(user==null)
   let total = null
   let status
   if (user==null){
@@ -201,9 +206,10 @@ router.get("/complete_earnings", async function(req, res){
     }
     let views;
     let date = new Date()
-    console.log("date = ", date)
+    //console.log("date = ", date)
+    console.log("user = ", user)
     total = await TotalEarnings.findOne({user: user._id})
-    console.log("total = ", total)
+    //console.log("total = ", total)
     if (total==null){
       total = new TotalEarnings({
         user: user._id,
@@ -212,7 +218,8 @@ router.get("/complete_earnings", async function(req, res){
         updated: new Date()
       })
       total.save()
-      console.log("new saved")
+      //total._id = encrypt(total._id)
+      //console.log("new saved")
     }
     status = 200
   }
@@ -220,44 +227,45 @@ router.get("/complete_earnings", async function(req, res){
 })
 
 router.post("/monthly_earnings", async function(req,res){
-  let userId = req.body.userId
+  let user = jwtVerify(req)
+  let userId = user.user._id
   let month = req.body.month
   let year = req.body.year
   let date = new Date(year, month, 1), y = date.getFullYear(), m = date.getMonth();
 
-  console.log("date = ", date)
-  console.log("m = ", m)
+  //console.log("date = ", date)
+  //console.log("m = ", m)
   let firstDay = new Date(y, m, 2);
   let lastDay = new Date(y, m + 1, 0);
 
   let views = await monthlyViews.find({userId: userId, startDate: firstDay, endDate: lastDay});
-  console.log(views);
+  //console.log(views);
   views=(views/1000)*30;
-  console.log(views)
+  //console.log(views)
   res.json(views).status(200)
 })
 
 router.post("/monthlyViews", async function(req, res){
-  console.log("monthly views called");
+  //console.log("monthly views called");
   let blogId = req.body.blogId
   let views = req.body.views
   let mViews =  await monthlyViews.findOne({blogId: blogId})
-  console.log(mViews)
+  //console.log(mViews)
   let date = new Date(), y = date.getFullYear(), m = date.getMonth();
   let startDate = new Date(y, m, 2);
   let endDate = new Date(y, m + 1, 0);
-  console.log("start date=",startDate);
-  console.log(endDate);
+  //console.log("start date=",startDate);
+  //console.log(endDate);
   let userId = await Blog.findOne({_id: blogId})
-  console.log("user_id = ", await userId)
-  console.log("user_id = ", await userId.userId)
+  //console.log("user_id = ", await userId)
+  //console.log("user_id = ", await userId.userId)
 
   if(mViews!=null)
   {
-    console.log("its there")
+    //console.log("its there")
     mViews.viewCount = views
     mViews.save()
-    console.log("79 = ", mViews)
+    //console.log("79 = ", mViews)
   }
   else{
     new_views = new monthlyViews({
@@ -268,7 +276,7 @@ router.post("/monthlyViews", async function(req, res){
       endDate: endDate
     })
     new_views.save()
-    console.log("new saved")
+    //console.log("new saved")
   }
   //monthlyViews.update(
   //  {blogId: blogId},

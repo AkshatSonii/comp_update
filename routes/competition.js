@@ -44,12 +44,12 @@ router.get("/competitionList", async(req,res) => {
   try{
     const currentDate = new Date();
 
-    const comp = await Competition.find();
+    // const comp = await Competition.find();
 
-    // const comp = await Competition.find({
-    //   startDate: { $lte : currentDate },
-    //   endDate: { $gte : currentDate },
-    // });
+    const comp = await Competition.find({
+      startDate: { $lte : currentDate },
+      endDate: { $gte : currentDate },
+    });
 
     console.log(comp);
     res.json(comp);
@@ -67,9 +67,9 @@ router.get("/competitionList", async(req,res) => {
 router.post('/competitionRegister', async (req, res) => {
   const { competitionId } = req.body;
 
-  // let user = jwtVerify(req);
-  // console.log("user = ", user.user)
-  // const userId = user.user._id;
+  let user = jwtVerify(req);
+  console.log("user = ", user.user)
+  const userId = user.user._id;
 
   const blogId = req.query.blogId;
 
@@ -82,7 +82,7 @@ router.post('/competitionRegister', async (req, res) => {
       }
 
       const ranking = new Ranking({
-        // userId,
+        userId,
         blogId,
         viewCount: 0,
         competitionId,
@@ -93,8 +93,7 @@ router.post('/competitionRegister', async (req, res) => {
         res.status(201).json({ message: "ranking saved", ranking });
       });
 
-      // Implement your registration logic here (e.g., adding user to competition participants)
-      // For demonstration purposes, just logging the registration details
+      
       console.log(`User ${userId} registered for competition: ${competitionName}`);
 
       res.json({ message: 'Registration successful' });

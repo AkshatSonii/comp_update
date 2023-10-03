@@ -8,6 +8,9 @@ const { User, Referral} = require("../models.js");
 const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
+const bcrypt = require("bcryptjs");
+const {encrypt, decrypt} = require("./encrypt")
+
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
   credentials: {
@@ -33,20 +36,20 @@ router.post("/googleLogin", upload.single("image"), async function(req, res){
   const email = req.body.email
   const picture = req.body.picture
 
-  console.log(name, email, picture)
+  //console.log(name, email, picture)
   let msg
   let user = await User.findOne({email: email})
   let key = "already saved"
 
-  console.log("user = ", user)
+  //console.log("user = ", user)
 
   if(user){
-    console.log("user found")
+    //console.log("user found")
     msg = 0
   }
   else{
     msg = 1
-    console.log("user not found")
+    //console.log("user not found")
     const referralId = Math.floor(Math.random() * 10000000);
     user = new User({
       username: name,
@@ -72,7 +75,8 @@ router.post("/googleLogin", upload.single("image"), async function(req, res){
       );
     }
 
-    const Key = `profile/images/${user._id}/profile.jpeg`;
+
+    const Key = `profile/images/${user.username}/profile.jpeg`;
 
     const res = await fetch(picture)
     const blob = await res.arrayBuffer()
@@ -93,7 +97,7 @@ router.post("/googleLogin", upload.single("image"), async function(req, res){
   jwt.sign({ user: user }, "secretkey", async(err, token) => 
   {
     res.status(200).json({
-      _id: user._id, 
+      _id: encrypt(user._id),
       success: msg,
       url: key,
       token: token
@@ -102,29 +106,34 @@ router.post("/googleLogin", upload.single("image"), async function(req, res){
 })
 
 router.post("/login", function (req, res) {
-  console.log("in login")
-  console.log("body = ", req.body)
+  //console.log("in login")
+  //console.log("body = ", req.body)
   const user = new User({
     username: req.body.username,
     password: req.body.password,
   });
-  console.log("user = ", user)
-  req.login(user, function (err) {
-    if (!err) {
+  //console.log("user = ", user)
         User.findOne(
           { $or: [{ username: user.username }, { email: user.username }] },
           (err, user) => {
-            jwt.sign({ user: user }, "secretkey", (err, token) => {
-              console.log("token = ", token)
-            res.status(200).json({"user": user, "token": token});
-          });
+            //console.log("user = ", user)
+            //console.log("password = ", user.password)
+            bcrypt.compare(req.body.password, user.password).then(function(result) {
+              // result == true
+              //console.log("result = ", result)
+              if (result==true){
+                jwt.sign({ user: user }, "secretkey", (err, token) => {
+                  //console.log("token = ", token)
+                  user._id = encrypt(user._id)
+                res.status(200).json({"user": user, "token": token});
+              });
+              }
+              else{
+                res.status(400).json("wrong username/email or password")
+              }
+            });
         }
         );
-      }
-      else {
-        res.status(404).json({ message: "username or password is wrong" });
-    }
-  })
 });
 
 router.get("/api", (req, res) => {

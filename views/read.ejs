@@ -224,7 +224,7 @@
                             <div class="blog_author_box r-flex ">
                                 <div class="blog_author_pi"><img src="images/logo.png" alt=""></div>
                                 <div class="blog_about_author_cont">
-                                    <div class="blog_author_name">Devender</div>
+                                    <div class="blog_author_name"></div>
                                     <div class="blog_author_details">
                                         Quisque sed tristique felis. Lorem visit my website amet, consectetur adipiscing elit. Phasellus quis mi auctor, tincidunt nisl eget, finibus odio. Duis tempus elit quis risus congue feugiat. Thanks for stop Cloapedia!
                                     </div>
@@ -318,7 +318,7 @@
                         <!-- ======== comment box ======== -->
 
                         <div class="comments__show_container">
-                            <div class="comment_show_boder_head">3 Comments</div>
+                            <div id="no_comments" class="comment_show_boder_head">3 Comments</div>
                             <div class="comments_show_box ali-c jut-c">
                             </div>
                         </div>
@@ -329,7 +329,6 @@
                         <div class="reply_container">
                             <div class="blog_reply_border_head">Leave a Reply</div>
                             <form id="add_comment" class="comments_form_box" onsubmit="submitForm(this);return false">
-                                <input type="name" name="naem" id="comment_name" placeholder="Your name">
                                 <textarea name="comment" id="comment_text" cols="30" rows="10" placeholder="Your comment"></textarea>
                                 <button class="blog_comment_btn" type="submit">Submit Comment</button>
                             </form>
@@ -420,14 +419,14 @@
 
             data = data.blocks
             let cont = document.getElementById("blog_content")
-            //console.log(cont)
+            ////console.log(cont)
             let wordCount = 0
 
             for (let i in data){
                 let elem;
                 let div = document.createElement("div")
-                //console.log(i)
-                //console.log(data[i])
+                ////console.log(i)
+                ////console.log(data[i])
                 if (data[i].type=="header"){
                     elem = `<h${data[i].data.level} id="${data[i].id}">${data[i].data.text}</h${data[i].data.level} style="margin-bottom:10px;">`
                 }
@@ -463,15 +462,15 @@
                     }
                 }
                 div.innerHTML = elem
-                //console.log(div)
+                ////console.log(div)
 
                 cont.append(div)
             }
-            //console.log("word count = ", wordCount)
+            ////console.log("word count = ", wordCount)
             //wordCount = ((wordCount/250)).toString() + "000"
 //
             //document.getElementById("wordCount").innerHTML = wordCount.slice(0,3)
-            //console.log("word count = ", wordCount/250, "mins")
+            ////console.log("word count = ", wordCount/250, "mins")
         }
 
         function burgerFuncation() {
@@ -481,8 +480,8 @@
         }
 
         function ImageUploaded(e) {
-            //console.log(e.files)
-            //console.log(e.id)
+            ////console.log(e.files)
+            ////console.log(e.id)
             let body = new FormData();
             body.append("blogId", "6437cf61159891149608d102")
             body.append("userId", "641be792bacccc03c37fc0e4")
@@ -494,13 +493,13 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    //console.log(data);
+                    ////console.log(data);
                     elem = document.getElementById("image_" + e.id)
-                    //console.log(elem)
+                    ////console.log(elem)
                     elem.src = data.url;
                 })
                 .catch((err) => {
-                    //console.log(err)
+                    ////console.log(err)
                 });
         }
 
@@ -512,7 +511,7 @@
                 };
             }
             constructor({ data }) {
-                //console.log(data.url)
+                ////console.log(data.url)
                 if (data.url) {
                     this.data = data.url;
                 }
@@ -531,7 +530,7 @@
             }
 
             save(blockContent) {
-                //console.log(blockContent.getElementsByTagName('img')[0])
+                ////console.log(blockContent.getElementsByTagName('img')[0])
                 var img = blockContent.getElementsByTagName('img')[0]
                 return {
                     url: img.src
@@ -540,7 +539,7 @@
         }
         function saveEditor() {
             editor.save().then((output) => {
-                //console.log('Data: ', output);
+                ////console.log('Data: ', output);
                 const blog = {
                     id: "6437cf61159891149608d102",
                     body: output,
@@ -549,17 +548,17 @@
                     titleImage: document.getElementById("titleImage").src,
                     tags: getTags()
                 };
-                //console.log(blog)
+                ////console.log(blog)
                 saveData(blog);
                 alert("Blog submitted for review")
             })
 
             // .catch((err) => {
-            //   ////console.error(err);
+            //   //////console.error(err);
             //   toast.error("Blog not published.Please login again")
             // });)
             // .catch((error) => {
-            //     //console.log('Saving failed: ', error)
+            //     ////console.log('Saving failed: ', error)
             // });
         }
 
@@ -573,10 +572,10 @@
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    ////console.log("blog = ", blog)
-                    ////console.log(data);
+                    //////console.log("blog = ", blog)
+                    //////console.log(data);
                     if (data.message) {
-                        //console.log(data.message);
+                        ////console.log(data.message);
 
                     }
                 });
@@ -678,15 +677,15 @@
 
         function getTags() {
             elem = document.getElementsByClassName("tag")
-            //console.log(elem[0])
+            ////console.log(elem[0])
             var list_tags = []
             for (i in elem) {
-                //console.log(elem[i])
+                ////console.log(elem[i])
                 if (elem[i].value) {
                     list_tags.push(elem[i].value)
                 }
             }
-            //console.log(list_tags)
+            ////console.log(list_tags)
             return list_tags
         }
 
@@ -706,16 +705,16 @@
 
         function removeTag(e){
             let elem = e
-            //console.log(elem)
-            //console.log(elem.previousSibling)
+            ////console.log(elem)
+            ////console.log(elem.previousSibling)
             elem.previousSibling.remove()
             elem.remove()
         }
 
         function newTags(e) {
-            //console.log(e)
+            ////console.log(e)
             new_tag = '<input class="tag" placeholder="Tag #1" type="text" style="border:none; text-align: center; height: 15px; width: 70px; border-radius:3px; background-color:' + generateRandomColor() + '; color: white" onSubmit=newTags(this)>'
-            //console.log(e.parentElement)
+            ////console.log(e.parentElement)
             new_div = document.createElement("div")
             new_div.style.width = "70px"
             new_div.style.display = "inline"
@@ -729,7 +728,7 @@
 
         async function setTitleImage(e) {
             if (e.files) {
-                ////console.log("files = ", e.target.files[0])
+                //////console.log("files = ", e.target.files[0])
                 let body = new FormData();
                 body.append("blogId", "6437cf61159891149608d102")
                 body.append("userId", "641be792bacccc03c37fc0e4")
@@ -740,13 +739,13 @@
                     body: body
                 }).then((res) => res.json())
                     .then((data) => {
-                        //console.log(data);
+                        ////console.log(data);
                         elem = document.getElementById("titleImage")
                         elem.src = data.file.url
-                        ////console.log("url image of uploaded = ", data.file);
+                        //////console.log("url image of uploaded = ", data.file);
                     })
                     .catch((err) => {
-                        //console.error(err);
+                        ////console.error(err);
                         toast.error("Blog not published.Please login again")
                     });
             }
@@ -754,7 +753,7 @@
 
         $("h3[contenteditable]").keypress(function (evt) {
 
-            //console.log("key pressed")
+            ////console.log("key pressed")
 
             var keycode = evt.charCode || evt.keyCode;
             if (keycode == 13) { //Enter key's keycode
@@ -764,28 +763,29 @@
 
         (async function call() {
             blogId = await getParams()
-            //console.log(blogId)
+            ////console.log(blogId)
             await fetch(`/blog?blogId=${await blogId}`, options)
                 .then(function (response) {
-                    // //console.log(response.json())
+                    // ////console.log(response.json())
                     return response.json();
                 })
                 .then(function (jsonData) {
-                    console.log(jsonData.blog)
+                    //console.log(jsonData.blog)
                     jsonData = jsonData.blog;
 
                     titleImage = document.getElementById("titleImage")
                     titleImage.src = jsonData[0]["titleImage"]
                     title = document.getElementById("title")
                     title.innerHTML = jsonData[0]["title"]
-                    console.log("title = ", jsonData[0]["title"])
+                    //console.log("title = ", jsonData[0]["title"])
                     document.title = jsonData[0]["title"]
                     document.getElementById("likes").innerHTML = jsonData[0]["viewCount"]
                     document.getElementById("publish_date").innerHTML = date_string(jsonData[0]["date"])
                     setTags(jsonData[0].tags)
+                    //console.log("user = ", jsonData[0].userId)
                     authorDetails(jsonData[0].userId)
 
-                    //console.log("body=  ", jsonData[0].body);
+                    ////console.log("body=  ", jsonData[0].body);
                     if (jsonData[0].body !== null) {
                         editor = loadData(jsonData[0].body);
                     } else {
@@ -803,7 +803,7 @@
                 return response.json();
             })
                 .then(function (data) {
-                    //console.log(data.userInfo.body)
+                    ////console.log(data.userInfo.body)
                     elem = document.getElementById("author_name")
                     elem.innerHTML = data.userInfo.body.name
                     authorName = data.userInfo.body.name;
@@ -819,7 +819,7 @@
 
         function changeDesc() {
             meta = document.getElementsByClassName("ce-paragraph")[0]
-            //console.log(meta)
+            ////console.log(meta)
             document.querySelector('meta[property="og:description"]').setAttribute("content", meta.innerHTML);
         }
 
@@ -834,20 +834,20 @@
 
             data = data.blog
 
-            //console.log("data = ", data)
+            ////console.log("data = ", data)
 
             text = document.getElementsByClassName("left_prev_box")
-            //console.log(text)
+            ////console.log(text)
 
             images = document.getElementsByClassName("right_prev_box")
-            //console.log(images)
+            ////console.log(images)
 
             for (let i in data){
-                //console.log(i)
-                //console.log(text[i].children[0])
+                ////console.log(i)
+                ////console.log(text[i].children[0])
                 text[i].children[0].innerHTML = `<a href=read?blogId=${data[i]._id}>${data[i].title}</a>`
 
-                //console.log(images[i].children[0])
+                ////console.log(images[i].children[0])
                 images[i].children[0].src = data[i].titleImage
             }
         }
@@ -858,7 +858,7 @@
         function date_string(date){
             parts = date.split("/")
 
-            console.log("parts = ", parts)
+            //console.log("parts = ", parts)
 
             let months = {
                 "1":"Jan",
@@ -879,7 +879,7 @@
 
         randomBlogs();
         function addRecent(data){
-            //console.log(screen.height)
+            ////console.log(screen.height)
             let cont = document.createElement("div")
             cont.className = "recent_right_blog_box r-flex ali-c"
             let height
@@ -899,13 +899,13 @@
             `
             cont.innerHTML = blog
             cont.style.width = "400px"
-            //console.log(cont)
+            ////console.log(cont)
             let holder = document.getElementsByClassName("main_hading_right_recent_post")[0]
             holder.append(cont)
         }
 
         function addRecommendations(data){
-            //console.log(screen.height)
+            ////console.log(screen.height)
             let cont = document.createElement("div")
             cont.className = "blog_also_blog"
             let height
@@ -924,7 +924,7 @@
                         <a  >${data["tags"]}</a>
                     </div>`
             cont.innerHTML = blog
-            //console.log(cont)
+            ////console.log(cont)
             let holder = document.getElementsByClassName("blog_also_box r-flex")[0]
             holder.append(cont)
         }
@@ -940,10 +940,10 @@
 
             data = data.blog
 
-            //console.log("data = ", data)
+            ////console.log("data = ", data)
 
             cont = document.getElementsByClassName("blog_also_blog")
-            //console.log(cont)
+            ////console.log(cont)
 
             for (let i in data){
                 addRecommendations(data[i])
@@ -961,10 +961,10 @@
 
             data = data.blog
 
-            //console.log("data = ", data)
+            ////console.log("data = ", data)
 
             cont = document.getElementsByClassName("main_hading_right_recent_post")
-            //console.log(cont)
+            ////console.log(cont)
 
             for (let i in data){
                 addRecent(data[i])
@@ -982,7 +982,7 @@
                         params[nameVal[0]] = nameVal[1];
                     }
                 }
-                //console.log(params["blogId"])
+                ////console.log(params["blogId"])
                 return params["blogId"];
             }
 
@@ -990,19 +990,20 @@
 
     async function addComments(){
         let container = document.getElementsByClassName("comments_show_box ali-c jut-c")[0]
-        //console.log(container)
+        ////console.log(container)
         let req = await fetch(`/comment/${await getParams()}`)
         let data = await req.json()
-        console.log("commnets = ", data)
+        let count = 0
+        //console.log("commnets = ", data)
         for (let i in data.user){
-            //console.log("comment = ", data.user[i])
+            ////console.log("comment = ", data.user[i])
             let comment = `
                 <div style="margin-left:0px" class="comment_user_img">
                     <img src="images/logo.png" alt="">
                 </div>
                 <div style="margin-left:0px" class="comments_right_side_show">
                     <div class="comments_show_name_and_time r-flex ali-c">
-                        <span class="comment_show_name">${data.user[i].userId}</span>
+                        <span class="comment_show_name">${data.user[i].username}</span>
                         <span class="comment_show_time">${date_string(data.user[i].date)}</span>
                     </div>
                     <div class="comment_show_main_cont">${data.user[i].body}</div>
@@ -1014,16 +1015,20 @@
             div.style.marginLeft = "0px";
             div.innerHTML = comment
             container.append(div)
+            comment_count += 1
     }
+    document.getElementById("no_comments").innerHTML = `${comment_count} Comments`
     }
     addComments();
 
+    let comment_count = 0
+
     async function submitForm(event){
-       //console.log("form submitted")
+       ////console.log("form submitted")
 
-       //console.log(event)
+       ////console.log(event)
 
-       //console.log(localStorage.getItem("user"))
+       ////console.log(localStorage.getItem("user"))
 
        let token = localStorage.getItem("token")
 
@@ -1033,7 +1038,9 @@
             "status": "review"
        }
 
-       //console.log(body)
+       ////console.log(body)
+
+       let container = document.getElementsByClassName("comments_show_box ali-c jut-c")[0]
 
       let data = await fetch(`/newComment`, {
                 method: "POST",
@@ -1045,7 +1052,33 @@
             })
       
       let user = await data.json()
-      //console.log(user)
+
+      //console.log("comment = ", user)
+
+      let comment = `
+            <div style="margin-left:0px" class="comment_user_img">
+                <img src="images/logo.png" alt="">
+            </div>
+            <div style="margin-left:0px" class="comments_right_side_show">
+                <div class="comments_show_name_and_time r-flex ali-c">
+                    <span class="comment_show_name">${user.username}</span>
+                    <span class="comment_show_time">${date_string(user.date)}</span>
+                </div>
+                <div class="comment_show_main_cont">${user.body}</div>
+                <button class="comment_cont_reply">Reply</button>
+            </div>
+        `
+        let div = document.createElement("div")
+        div.className = "comments_show_cmt r-flex "
+        div.style.marginLeft = "0px";
+        div.innerHTML = comment
+        container.append(div)
+        comment_count += 1
+        document.getElementById("no_comments").innerHTML = `${comment_count} Comments`
+
+        event.comment.value = ""
+            
+      ////console.log(user)
     }
 
     async function authorDetails(user_id){
@@ -1064,13 +1097,13 @@
 
         setAuthor(author.user[0])
 
-        console.log("author = ", author)
+        //console.log("author = ", author)
     }
 
     function setAuthor(data){
         let cont = document.getElementsByClassName("blog_author_container")[0]
         let block = cont.children[1]
-        console.log(block)
+        //console.log(block)
         let img = block.children[0].children[0]
         if (data["pp"]==null){
             img.src = "https://kurenai-image-testing.s3.ap-south-1.amazonaws.com/logo-removebg-preview.png"
@@ -1086,7 +1119,13 @@
         
         let content = block.children[1].children
 
-        content[0].innerHTML = data["username"]
+        let elem = document.createElement("a")
+        elem.innerHTML = data["username"]
+        elem.href = `/author?userId=${data["_id"]}`
+
+        content[0] = ""
+
+        content[0].append(elem)//data["username"]
         content[1].innerHTML = data["info"]
     }
 
@@ -1095,9 +1134,9 @@
 <script>
     //nav bar scripts
     function changeClass(choice){
-        console.log("change class")
+        //console.log("change class")
         let elem = document.getElementsByClassName("dropdown-content")[0]
-        console.log(elem.style.display)
+        //console.log(elem.style.display)
         if (elem.style.display==""){
             elem.style.display = "block"
         }
@@ -1122,12 +1161,14 @@
     }
 
     async function newBlog(){
+        const token = localStorage.getItem("token")
         const userDetails = await userData();
+        
         const blog = {
             "userId": userDetails.user._id,
             "title": "Title",
             "views": 0,
-            "status": "new",
+            "status": "draft",
             "titleImage": "https://kurenai-image-testing.s3.ap-south-1.amazonaws.com/logo-removebg-preview.png",
             "userName": userDetails.user._id,
         }
@@ -1135,20 +1176,21 @@
             method: "POST",
             headers: {
                 "content-type": "application/json",
+                Authorization: "Bearer " + token,
             },
             body: JSON.stringify(blog)
         })
 
         let blogs = await data.json()
 
-        console.log("data = ", blogs)
+        //console.log("data = ", blogs)
 
         window.location.href = `/write?blogId=${blogs.blog._id}`
     }
 
     function setWriteBlog(){
         let doc = document.getElementById("write_blog")
-        console.log(localStorage.getItem("user"))
+        //console.log(localStorage.getItem("user"))
         if (localStorage.getItem("user")){
             let elem = `
             <a class="nav_manu_link write_nav_btn r-flex ali-c">
@@ -1201,7 +1243,7 @@
         })
         let res = await data.json();
 
-        console.log("res = ", res)
+        //console.log("res = ", res)
 
         localStorage.removeItem("user")
         localStorage.removeItem("token")
@@ -1225,21 +1267,46 @@
 
         let res = await data.json()
 
-        console.log("res = ", res)
+        //console.log("res = ", res)
     }
 
+    let startDate = new Date();
+    let elapsedTime = 0;
+
+    const focus = function() {
+        startDate = new Date();
+    };
+
     function updateViews(){
-        viewCount()
+        const endDate = new Date();
+        const spentTime = endDate.getTime() - startDate.getTime();
+        elapsedTime += (spentTime/1000);
+        startDate = new Date();
+
+        if (elapsedTime>=30){
+            //console.log("elapsed time = ", elapsedTime)
+            viewCount()
+            elapsedTime = 0
+        }
         totalTime += 30
         setTimeout(updateViews, 30000)
     }
+
+    const blur = function() {
+        const endDate = new Date();
+        const spentTime = endDate.getTime() - startDate.getTime();
+        elapsedTime += (spentTime/1000);
+        //console.log("elapsed time after blur = ", elapsedTime)
+    };
+
+    window.addEventListener('blur', blur);
 
     let totalTime = 0
 
     setTimeout(updateViews, 30000)
 
     function addingAds(){
-        console.log("height = ", window.innerHeight)
+        //console.log("height = ", window.innerHeight)
         let elem = document.createElement("div")
         let img_elem = `
         <img src="https://images.unsplash.com/photo-1678532685164-e0b1071010dd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="">
@@ -1249,10 +1316,11 @@
         let paras = document.getElementsByClassName("ce-paragraph")
 
         for (i in paras){
-            console.log(i)
-            console.log(paras[i])
+            //console.log(i)
+            //console.log(paras[i])
         }
     }
+    window.addEventListener('focus', focus);
     addingAds();
 </script>
 

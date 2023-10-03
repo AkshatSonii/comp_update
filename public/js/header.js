@@ -1,7 +1,7 @@
 function changeClass(choice){
-    console.log("change class")
+    //console.log("change class")
     let elem = document.getElementsByClassName("dropdown-content")[0]
-    console.log(elem.style.display)
+    //console.log(elem.style.display)
     if (elem.style.display==""){
         elem.style.display = "block"
     }
@@ -26,11 +26,12 @@ async function userData(){
 }
     async function newBlog(){
     const userDetails = await userData();
+    const token = localStorage.getItem("token")
     const blog = {
         "userId": userDetails.user._id,
         "title": "Title",
         "views": 0,
-        "status": "new",
+        "status": "draft",
         "titleImage": "https://kurenai-image-testing.s3.ap-south-1.amazonaws.com/logo-removebg-preview.png",
         "userName": userDetails.user._id,
     }
@@ -38,20 +39,21 @@ async function userData(){
         method: "POST",
         headers: {
             "content-type": "application/json",
+            Authorization: "Bearer " + token,
         },
         body: JSON.stringify(blog)
     })
 
     let blogs = await data.json()
 
-    console.log("data = ", blogs)
+    //console.log("data = ", blogs)
 
     window.location.href = `/write?blogId=${blogs.blog._id}`
 }
 
 function setWriteBlog(){
     let doc = document.getElementById("write_blog")
-    console.log(localStorage.getItem("user"))
+    //console.log(localStorage.getItem("user"))
     if (localStorage.getItem("user")){
         let elem = `
         <a class="nav_manu_link write_nav_btn r-flex ali-c">
@@ -104,7 +106,7 @@ function setProfile(){
         })
         let res = await data.json();
 
-        console.log("res = ", res)
+        //console.log("res = ", res)
 
         localStorage.removeItem("user")
         localStorage.removeItem("token")
