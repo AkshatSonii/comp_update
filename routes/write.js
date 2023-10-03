@@ -23,26 +23,9 @@ router.get("/write", (req, res) => {
   //}
 });
 
-
-
-router.get("/read", async(req, res) => {
-  const blogId = req.query.blogId;
-
-  try{
-    const found_blog = await Blog.findOne({_id : blogId});
-
-    if(!found_blog){
-      return res.status(404).json({ message: 'Blog not found' });
-    }
-
-    res.render("read", {title : found_blog.title, content : found_blog.body});
-  }
-
-  catch(err){
-    console.log(err);
-    res.status(500).json({ message: 'Server error' })
-  }
-  
+router.get("/read", (req, res) => {
+  console.log("req = ", req)
+  res.render("read");
 });
 
 

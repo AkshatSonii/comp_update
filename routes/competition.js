@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { Competition , Ranking, User} = require("../models.js");
+const { Competition , Ranking, User, Blog} = require("../models.js");
+const jwtVerify = require("./jwt")
 
 
 router.get("/competition/:name", async(req, res) => {
@@ -22,8 +23,8 @@ router.get("/competition/:name", async(req, res) => {
       var user_s = []
 
       for(let i=0;i<ranking_users.length ;i++){
-        const a = await User.findOne({_id : ranking_users[i].userId});
-        user_s.push({name : a.username , rank : ranking_users[i].rank , blogId : ranking_users[i].blogId});
+        const a = await Blog.findOne({_id : ranking_users[i].blogId});
+        user_s.push({name : a.author , rank : ranking_users[i].rank , blogId : ranking_users[i].blogId});
       }
 
       res.status(201).render("comparison" , {user_s : user_s , competition : found_competition});
@@ -36,6 +37,87 @@ router.get("/competition/:name", async(req, res) => {
 
     // res.status(201).render("comparison");
 });
+
+
+
+router.get("/competitionList", async(req,res) => {
+  try{
+    const currentDate = new Date();
+
+    const comp = await Competition.find();
+
+    // const comp = await Competition.find({
+    //   startDate: { $lte : currentDate },
+    //   endDate: { $gte : currentDate },
+    // });
+
+    console.log(comp);
+    res.json(comp);
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({ message: 'Server error' })
+  }
+
+})
+
+
+
+
+router.post('/competitionRegister', async (req, res) => {
+  const { competitionId } = req.body;
+
+  // let user = jwtVerify(req);
+  // console.log("user = ", user.user)
+  // const userId = user.user._id;
+
+  const blogId = req.query.blogId;
+
+  try {
+      // Check if the competition exists
+      const competition = await Competition.findOne({ _id: competitionId });
+
+      if (!competition) {
+          return res.status(404).json({ error: 'Competition not found' });
+      }
+
+      const ranking = new Ranking({
+        // userId,
+        blogId,
+        viewCount: 0,
+        competitionId,
+      })
+
+      ranking.save((err, ranking) => {
+        if (err) throw err;
+        res.status(201).json({ message: "ranking saved", ranking });
+      });
+
+      // Implement your registration logic here (e.g., adding user to competition participants)
+      // For demonstration purposes, just logging the registration details
+      console.log(`User ${userId} registered for competition: ${competitionName}`);
+
+      res.json({ message: 'Registration successful' });
+  } catch (error) {
+      console.error('Error registering for competition:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+
+})
+
+
+
+router.put("/competition/update" , async(req, res) => {
+  try{
+    const updatedBlog = await Blog.findByIdAndUpdate(req.query.blogId , {status : "published"});
+    res.status(200).json(updatedBlog);
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({ message: 'Server error' })
+  }
+
+})
 
 
 
